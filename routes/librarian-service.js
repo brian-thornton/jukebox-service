@@ -4,11 +4,17 @@ const path = require('path');
 var appRouter = function (app, options) {
   const librarian = new JUtils.librarian(options);
 
-  app.get("/librarian/albums", function (req, res) {
-    res.status(200).send(librarian.getAlbums());
+  app.get("/librarian/libraries", function (req, res) {
+    res.status(200).send(librarian.getAll());
   });
 
-  app.get("/librarian/coverArt", function (req, res) {
+  app.get("/librarian/albums", function (req, res) {
+    const start = req.query.start;
+    const limit = req.query.limit;
+    res.status(200).send(librarian.getAlbums(start, limit));
+  });
+
+  app.get("/librarian/coverArt", function (req, res) {  
     res.sendFile(path.join(req.query.path, 'folder.jpg'));
   });
 
