@@ -14,12 +14,14 @@ var appRouter = function (app, options) {
     res.status(200).send(librarian.getAlbums(start, limit));
   });
 
-  app.get("/librarian/coverArt", function (req, res) {  
+  app.get("/librarian/coverArt", function (req, res) {
     res.sendFile(path.join(req.query.path, 'folder.jpg'));
   });
 
   app.get("/librarian/tracks", function (req, res) {
-    res.status(200).send(librarian.getTracks());
+    const start = req.query.start;
+    const limit = req.query.limit;
+    res.status(200).send(librarian.getTracks(start, limit));
   });
 
   app.get("/librarian/albumTracks", function (req, res) {
