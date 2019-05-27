@@ -14,6 +14,10 @@ var appRouter = function (app, options) {
     res.status(200).send(librarian.getAlbums(start, limit));
   });
 
+  app.get("/librarian/albums/search", function (req, res) {
+    res.status(200).send(librarian.searchAlbums(req.query.search));
+  });
+
   app.get("/librarian/coverArt", function (req, res) {
     res.sendFile(path.join(req.query.path, 'folder.jpg'));
   });
