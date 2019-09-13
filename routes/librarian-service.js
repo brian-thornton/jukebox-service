@@ -31,6 +31,10 @@ var appRouter = function (app, options) {
   app.get("/librarian/albumTracks", function (req, res) {
     res.status(200).send(librarian.getAlbumTracks(req.query.path));
   });
+
+  app.delete("/librarian", function(req, res) {
+    res.status(200).send(librarian.remove(req.query));
+  });
 }
 
 module.exports = appRouter;
