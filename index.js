@@ -32,8 +32,6 @@ librarian.getAll().forEach((library) => {
   }
 }) 
 
-console.log(librarian.getAll());
-
 var server = app.listen(3001, function () {
     console.log("app running on port.", server.address().port);
 });

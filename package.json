@@ -11,6 +11,6 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "jukebox-utils": "file:///Users/thornton/Desktop/git/jukebox-utils"
+    "jukebox-utils": "file:../jukebox-utils"
   }
 }

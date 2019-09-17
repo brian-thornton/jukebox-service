@@ -13,8 +13,7 @@ var appRouter = function (app, options) {
   });
 
   app.post("/queue/enqueueTracks", function (req, res) {
-    console.log(req.body.tracks);
-    res.status(200).send(queue.enqueueTracks(req.body.tracks));
+    res.status(200).send(queue.enqueueTracks(req.body));
   });
 
   app.post("/queue/enqueueTracksTop", function (req, res) {
