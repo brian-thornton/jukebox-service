@@ -17,7 +17,7 @@ var appRouter = function (app, options) {
   });
 
   app.post("/queue/enqueueTracksTop", function (req, res) {
-    res.status(200).send(queue.enqueueTracksTop(req.body.tracks));
+    res.status(200).send(queue.enqueueTracksTop(req.body));
   });
 
   app.get("/queue/enqueueTop", function (req, res) {
