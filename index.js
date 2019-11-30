@@ -17,6 +17,13 @@ const options = {
     storageLocation: './storage'
   }
 }
+
+if (!fs.existsSync(options.dataAccessOptions.storageLocation)) {
+  fs.mkdirSync(options.dataAccessOptions.storageLocation);
+  fs.mkdirSync(`${options.dataAccessOptions.storageLocation}/library`);
+}
+
+
 const librarian = new JUtils.librarian(options);
 
 librarianSerivce(app, options);
