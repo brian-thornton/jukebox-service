@@ -35,6 +35,14 @@ var appRouter = function (app, options) {
   app.delete("/librarian", function(req, res) {
     res.status(200).send(librarian.remove(req.query));
   });
+
+  app.post("/librarian/scan", function (req, res) {
+    res.status(200).send(librarian.scan(req.body));
+  });
+
+  app.post("/librarian/add", function (req, res) {
+    res.status(200).send(librarian.add(req.body));
+  })
 }
 
 module.exports = appRouter;
