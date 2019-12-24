@@ -15,6 +15,15 @@ var appRouter = function (app, options) {
   app.post("/playlists/addToPlaylist", function (req, res) {
     res.status(200).send(listKeeper.addToPlaylist(req.body.name, req.body.tracks));
   });
+
+  app.post("/playlists/removeFromPlaylist", function (req, res) {
+    res.status(200).send(listKeeper.removeFromPlaylist(req.body.name, req.body.tracks));
+  });
+
+
+  app.post("/playlists/add", function (req, res) {
+    res.status(200).send(listKeeper.createPlaylist(req.body.name, req.body.tracks));
+  })
 }
 
 module.exports = appRouter;
