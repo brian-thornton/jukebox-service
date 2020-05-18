@@ -33,7 +33,7 @@ var appRouter = function (app, options) {
   });
 
   app.get("/queue/stop", function (req, res) {
-    res.status(200).send(queue.stop());
+    res.status(200).send(queue.stop(req.query.token));
   });
 
   app.get("/queue/next", function (req, res) {

@@ -8,6 +8,7 @@ var appRouter = function (app, options) {
   });
 
   app.get("/volume/down", function (req, res) {
+    console.log('volume down');
     res.status(200).send(volume.decreaseVolume());
   });
 }

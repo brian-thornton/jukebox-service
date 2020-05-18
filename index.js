@@ -7,6 +7,7 @@ const queueSerivce = require("./routes/queue-service.js");
 const volumeService = require("./routes/volume-service.js");
 const playlistService = require("./routes/playlist-service.js");
 const spotifyService = require("./routes/spotify-service.js");
+const settingsService = require("./routes/settings-service.js");
 const app = express();
 
 app.use(bodyParser.json());
@@ -32,6 +33,7 @@ queueSerivce(app, options);
 volumeService(app, options);
 playlistService(app, options);
 spotifyService(app, options);
+settingsService(app, options);
 
 librarian.getAll().forEach((library) => {
   if (!fs.existsSync(library.path)) {
