@@ -18,6 +18,10 @@ var appRouter = function (app, options) {
     res.status(200).send(librarian.searchAlbums(req.query.search));
   });
 
+  app.get("/librarian/tracks/search", function (req, res) {
+    res.status(200).send(librarian.searchTracks(req.query.search));
+  });
+
   app.get("/librarian/coverArt", function (req, res) {
     res.sendFile(path.join(req.query.path, 'folder.jpg'));
   });
@@ -42,7 +46,15 @@ var appRouter = function (app, options) {
 
   app.post("/librarian/add", function (req, res) {
     res.status(200).send(librarian.add(req.body));
-  })
+  });
+
+  app.post("/librarian/saveCoverArt", function (req, res) {
+    res.status(200).send(librarian.saveCoverArt(req.body));
+  });
+
+  app.post("/librarian/removeCoverArt", function (req, res) {
+    res.status(200).send(librarian.removeCoverArt(req.body));
+  });
 }
 
 module.exports = appRouter;
