@@ -36,12 +36,12 @@ var appRouter = function (app, options) {
     res.status(200).send(librarian.getAlbumTracks(req.query.path));
   });
 
-  app.delete("/librarian", function(req, res) {
+  app.delete("/librarian", function (req, res) {
     res.status(200).send(librarian.remove(req.query));
   });
 
   app.post("/librarian/scan", function (req, res) {
-    res.status(200).send(librarian.scan(req.body));
+    librarian.scan(req.body).then(res.status(200).send.bind(res));
   });
 
   app.post("/librarian/add", function (req, res) {
