@@ -16,6 +16,10 @@ var appRouter = function (app, options) {
     res.status(200).send(queue.removeFromQueue(req.body.tracks));
   });
 
+  app.post("/queue/clearQueue", function (req, res) {
+    res.status(200).send(queue.clearQueue());
+  });
+
   app.post("/queue/enqueueTracks", function (req, res) {
     res.status(200).send(queue.enqueueTracks(req.body));
   });
