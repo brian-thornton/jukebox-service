@@ -20,10 +20,13 @@ var appRouter = function (app, options) {
     res.status(200).send(listKeeper.removeFromPlaylist(req.body.name, req.body.tracks));
   });
 
-
   app.post("/playlists/add", function (req, res) {
     res.status(200).send(listKeeper.createPlaylist(req.body.name, req.body.tracks));
-  })
+  });
+
+  app.post("/playlists/delete", function (req, res) {
+    res.status(200).send(listKeeper.deletePlaylist(req.body.name));
+  });
 }
 
 module.exports = appRouter;
