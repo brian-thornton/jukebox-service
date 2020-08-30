@@ -1,5 +1,6 @@
 const JUtils = require('jukebox-utils');
 const path = require('path');
+const fs = require('fs');
 
 var appRouter = function (app, options) {
   const librarian = new JUtils.librarian(options);
@@ -54,6 +55,16 @@ var appRouter = function (app, options) {
 
   app.post("/librarian/removeCoverArt", function (req, res) {
     res.status(200).send(librarian.removeCoverArt(req.body));
+  });
+
+  app.get('/librarian/downloadTrack', function (req, res) {
+    var file = fs.createReadStream(req.query.file);
+    var stat = fs.statSync(req.query.file);
+    res.setHeader('Content-Length', stat.size);
+    console.log(stat.size);
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.setHeader('Content-Disposition', 'attachment; filename=test.mp3');
+    file.pipe(res);
   });
 }
 
