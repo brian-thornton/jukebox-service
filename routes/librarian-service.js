@@ -49,6 +49,11 @@ var appRouter = function (app, options) {
     res.status(200).send(librarian.add(req.body));
   });
 
+  app.get("/librarian/discover", function (req, res) {
+    console.log(librarian.discover(req.query.path));
+    res.status(200).send(librarian.discover(req.query.path));
+  });
+
   app.post("/librarian/saveCoverArt", function (req, res) {
     res.status(200).send(librarian.saveCoverArt(req.body));
   });
