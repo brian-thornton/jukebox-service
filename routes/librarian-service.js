@@ -33,6 +33,10 @@ var appRouter = function (app, options) {
     res.status(200).send(librarian.getTracks(start, limit));
   });
 
+  app.post("/librarian/getTrackAlbums", function (req, res) {
+    res.status(200).send(librarian.getTrackAlbums(req.body));
+  });
+
   app.get("/librarian/albumTracks", function (req, res) {
     res.status(200).send(librarian.getAlbumTracks(req.query.path));
   });
