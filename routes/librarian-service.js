@@ -2,79 +2,58 @@ const JUtils = require('jukebox-utils');
 const path = require('path');
 const fs = require('fs');
 
-var appRouter = function (app, options) {
-  const librarian = new JUtils.librarian(options);
+const appRouter = (app, options) => {
+  const librarian = new JUtils.Librarian(options);
 
-  app.get("/librarian/libraries", function (req, res) {
-    res.status(200).send(librarian.getAll());
-  });
+  const libraries = (req, res) => res.status(200).send(librarian.getAll());
+  const albumSearch = (req, res) => res.status(200).send(librarian.searchAlbums(req.query.search));
+  const trackSearch = (req, res) => res.status(200).send(librarian.searchTracks(req.query.search));
+  const coverArt = (req, res) => res.sendFile(path.join(req.query.path, 'folder.jpg'));
+  const trackAlbums = (req, res) => res.status(200).send(librarian.getTrackAlbums(req.body));
+  const albumTracks = (req, res) => res.status(200).send(librarian.getAlbumTracks(req.query.path));
+  const deleteLibrary = (req, res) => res.status(200).send(librarian.remove(req.query));
+  const scan = (req, res) => librarian.scan(req.body).then(res.status(200).send.bind(res));
+  const add = (req, res) => res.status(200).send(librarian.add(req.body));
+  const discover = (req, res) => res.status(200).send(librarian.discover(req.query.path));
+  const saveCoverArt = (req, res) => res.status(200).send(librarian.saveCoverArt(req.body));
+  const removeCoverArt = (req, res) => res.status(200).send(librarian.removeCoverArt(req.body));
 
-  app.get("/librarian/albums", function (req, res) {
-    const start = req.query.start;
-    const limit = req.query.limit;
+  const albums = (req, res) => {
+    const { start, limit } = req.query;
+
     res.status(200).send(librarian.getAlbums(start, limit));
-  });
+  };
 
-  app.get("/librarian/albums/search", function (req, res) {
-    res.status(200).send(librarian.searchAlbums(req.query.search));
-  });
+  const tracks = (req, res) => {
+    const { start, limit } = req.query;
 
-  app.get("/librarian/tracks/search", function (req, res) {
-    res.status(200).send(librarian.searchTracks(req.query.search));
-  });
-
-  app.get("/librarian/coverArt", function (req, res) {
-    res.sendFile(path.join(req.query.path, 'folder.jpg'));
-  });
-
-  app.get("/librarian/tracks", function (req, res) {
-    const start = req.query.start;
-    const limit = req.query.limit;
     res.status(200).send(librarian.getTracks(start, limit));
-  });
+  };
 
-  app.post("/librarian/getTrackAlbums", function (req, res) {
-    res.status(200).send(librarian.getTrackAlbums(req.body));
-  });
-
-  app.get("/librarian/albumTracks", function (req, res) {
-    res.status(200).send(librarian.getAlbumTracks(req.query.path));
-  });
-
-  app.delete("/librarian", function (req, res) {
-    res.status(200).send(librarian.remove(req.query));
-  });
-
-  app.post("/librarian/scan", function (req, res) {
-    librarian.scan(req.body).then(res.status(200).send.bind(res));
-  });
-
-  app.post("/librarian/add", function (req, res) {
-    res.status(200).send(librarian.add(req.body));
-  });
-
-  app.get("/librarian/discover", function (req, res) {
-    console.log(librarian.discover(req.query.path));
-    res.status(200).send(librarian.discover(req.query.path));
-  });
-
-  app.post("/librarian/saveCoverArt", function (req, res) {
-    res.status(200).send(librarian.saveCoverArt(req.body));
-  });
-
-  app.post("/librarian/removeCoverArt", function (req, res) {
-    res.status(200).send(librarian.removeCoverArt(req.body));
-  });
-
-  app.get('/librarian/downloadTrack', function (req, res) {
-    var file = fs.createReadStream(req.query.file);
-    var stat = fs.statSync(req.query.file);
+  const downloadTrack = (req, res) => {
+    const file = fs.createReadStream(req.query.file);
+    const stat = fs.statSync(req.query.file);
     res.setHeader('Content-Length', stat.size);
-    console.log(stat.size);
     res.setHeader('Content-Type', 'audio/mpeg');
     res.setHeader('Content-Disposition', 'attachment; filename=test.mp3');
     file.pipe(res);
-  });
-}
+  };
+
+  app.get('/librarian/libraries', libraries);
+  app.get('/librarian/albums', albums);
+  app.get('/librarian/albums/search', albumSearch);
+  app.get('/librarian/tracks/search', trackSearch);
+  app.get('/librarian/coverArt', coverArt);
+  app.get('/librarian/tracks', tracks);
+  app.get('/librarian/albumTracks', albumTracks);
+  app.get('/librarian/discover', discover);
+  app.get('/librarian/downloadTrack', downloadTrack);
+  app.post('/librarian/getTrackAlbums', trackAlbums);
+  app.post('/librarian/scan', scan);
+  app.post('/librarian/add', add);
+  app.post('/librarian/saveCoverArt', saveCoverArt);
+  app.post('/librarian/removeCoverArt', removeCoverArt);
+  app.delete('/librarian', deleteLibrary);
+};
 
 module.exports = appRouter;

@@ -28,7 +28,7 @@ if (!fs.existsSync(options.dataAccessOptions.storageLocation)) {
 }
 
 
-const librarian = new JUtils.librarian(options);
+const librarian = new JUtils.Librarian(options);
 
 librarianSerivce(app, options);
 queueSerivce(app, options);
