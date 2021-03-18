@@ -45,8 +45,32 @@ librarian.getAll().forEach((library) => {
   } else {
     librarian.enable(library.name);
   }
-}) 
+})
+
+app.use((err, req, res, next) => {
+  if (err) {
+
+  }
+  next();
+});
 
 var server = app.listen(3001, function () {
-    console.log("app running on port.", server.address().port);
+
+  setTimeout(() => {
+    console.clear();
+    console.log(`
+     ██ ██    ██ ██   ██ ███████ ██████   ██████  ██   ██ 
+     ██ ██    ██ ██  ██  ██      ██   ██ ██    ██  ██ ██  
+     ██ ██    ██ █████   █████   ██████  ██    ██   ███   
+██   ██ ██    ██ ██  ██  ██      ██   ██ ██    ██  ██ ██  
+ █████   ██████  ██   ██ ███████ ██████   ██████  ██   ██`);
+
+
+
+
+
+    console.log('*------------------------------------------*');
+    console.log("* Browse to http://localhost:3000 to rock. *");
+    console.log('*------------------------------------------*');
+  }, 15000);
 });
