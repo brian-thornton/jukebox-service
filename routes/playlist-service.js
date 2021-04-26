@@ -3,7 +3,10 @@ const JUtils = require('jukebox-utils');
 const appRouter = (app, options) => {
   const listKeeper = new JUtils.listKeeper(options);
 
-  app.get('/playlists/getAll', (req, res) => res.status(200).send(listKeeper.getAllPlaylists()));
+  app.get('/playlists/getAll', (req, res) => {
+    const { start, limit } = req.query;
+    res.status(200).send(listKeeper.getAllPlaylists(start, limit));
+  });
 
   app.get('/playlists/getPlaylist', (req, res) => {
     res.status(200).send(listKeeper.getPlaylist(req.query.name));
