@@ -6,8 +6,16 @@ const appRouter = (app, options) => {
   const librarian = new JUtils.Librarian(options);
 
   const libraries = (req, res) => res.status(200).send(librarian.getAll());
-  const albumSearch = (req, res) => res.status(200).send(librarian.searchAlbums(req.query.search));
-  const trackSearch = (req, res) => res.status(200).send(librarian.searchTracks(req.query.search));
+  const search = (req, res) => {
+    if (req.query.type === 'tracks') {
+      console.log('yo');
+      const data = librarian.searchTracks(req.query.search);
+      res.status(200).send(data);
+    } else {
+      const data = librarian.searchAlbums(req.query.search);
+      res.status(200).send(data);
+    }
+  };
   const coverArt = (req, res) => res.sendFile(path.join(req.query.path, 'folder.jpg'));
   const trackAlbums = (req, res) => res.status(200).send(librarian.getTrackAlbums(req.body));
   const albumTracks = (req, res) => res.status(200).send(librarian.getAlbumTracks(req.query.path));
@@ -20,13 +28,11 @@ const appRouter = (app, options) => {
 
   const albums = (req, res) => {
     const { start, limit } = req.query;
-
     res.status(200).send(librarian.getAlbums(start, limit));
   };
 
   const tracks = (req, res) => {
     const { start, limit } = req.query;
-
     res.status(200).send(librarian.getTracks(start, limit));
   };
 
@@ -41,8 +47,7 @@ const appRouter = (app, options) => {
 
   app.get('/librarian/libraries', libraries);
   app.get('/librarian/albums', albums);
-  app.get('/librarian/albums/search', albumSearch);
-  app.get('/librarian/tracks/search', trackSearch);
+  app.get('/librarian/search', search);
   app.get('/librarian/coverArt', coverArt);
   app.get('/librarian/tracks', tracks);
   app.get('/librarian/albumTracks', albumTracks);
