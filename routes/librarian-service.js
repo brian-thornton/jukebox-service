@@ -8,7 +8,6 @@ const appRouter = (app, options) => {
   const libraries = (req, res) => res.status(200).send(librarian.getAll());
   const search = (req, res) => {
     if (req.query.type === 'tracks') {
-      console.log('yo');
       const data = librarian.searchTracks(req.query.search);
       res.status(200).send(data);
     } else {
