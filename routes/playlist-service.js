@@ -27,6 +27,10 @@ const appRouter = (app, options) => {
   app.post('/playlists/delete', (req, res) => {
     res.status(200).send(listKeeper.deletePlaylist(req.body.name));
   });
+
+  app.post('/playlists/addTrackAtPosition', (req, res) => {
+    res.status(200).send(listKeeper.addTrackAtPosition(req.body.name, req.body.track, req.body.position));
+  });
 };
 
 module.exports = appRouter;

@@ -7,11 +7,13 @@ const appRouter = (app, options) => {
 
   const libraries = (req, res) => res.status(200).send(librarian.getAll());
   const search = (req, res) => {
-    if (req.query.type === 'tracks') {
-      const data = librarian.searchTracks(req.query.search);
+    const { start, limit, search, type } = req.query;
+
+    if (type === 'tracks') {
+      const data = librarian.searchTracks(search, start, limit);
       res.status(200).send(data);
     } else {
-      const data = librarian.searchAlbums(req.query.search);
+      const data = librarian.searchAlbums(search, start, limit);
       res.status(200).send(data);
     }
   };
