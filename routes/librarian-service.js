@@ -28,8 +28,8 @@ const appRouter = (app, options) => {
   const removeCoverArt = (req, res) => res.status(200).send(librarian.removeCoverArt(req.body));
 
   const albums = (req, res) => {
-    const { start, limit } = req.query;
-    res.status(200).send(librarian.getAlbums(start, limit));
+    const { start, limit, category } = req.query;
+    res.status(200).send(librarian.getAlbums(start, limit, category));
   };
 
   const tracks = (req, res) => {
