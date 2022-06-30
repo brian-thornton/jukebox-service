@@ -21,7 +21,7 @@ const appRouter = (app, options) => {
   });
 
   app.post('/playlists/add', (req, res) => {
-    res.status(200).send(listKeeper.createPlaylist(req.body.name, req.body.tracks));
+    res.status(200).send(listKeeper.createPlaylist(req.body.id, req.body.name, req.body.tracks));
   });
 
   app.post('/playlists/delete', (req, res) => {
