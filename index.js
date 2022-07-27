@@ -10,6 +10,7 @@ const spotifyService = require("./routes/spotify-service.js");
 const settingsService = require("./routes/settings-service.js");
 const statusService = require("./routes/status-service.js");
 const styleService = require("./routes/style-service.js");
+const lightingService = require("./routes/lighting-service.js");
 const app = express();
 
 app.use(bodyParser.json());
@@ -38,6 +39,7 @@ spotifyService(app, options);
 settingsService(app, options);
 statusService(app, options);
 styleService(app, options);
+lightingService(app, options);
 
 librarian.getAll().forEach((library) => {
   if (!fs.existsSync(library.path)) {
