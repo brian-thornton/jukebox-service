@@ -7,17 +7,27 @@ const appRouter = (app, options) => {
 
   const libraries = (req, res) => res.status(200).send(librarian.getAll());
   const search = (req, res) => {
-    const { start, limit, search, type } = req.query;
+    const { start, limit, search, type, startsWithFilter } = req.query;
 
     if (type === 'tracks') {
       const data = librarian.searchTracks(search, start, limit);
       res.status(200).send(data);
     } else {
-      const data = librarian.searchAlbums(search, start, limit);
+      const data = librarian.searchAlbums(search, start, limit, startsWithFilter);
       res.status(200).send(data);
     }
   };
-  const coverArt = (req, res) => res.sendFile(path.join(req.query.path, 'folder.jpg'));
+
+  const coverArt = (req, res) => {
+    if (fs.existsSync(path.join(req.query.path, 'folder.jpg'))) {
+      return res.sendFile(path.join(req.query.path, 'folder.jpg'));
+    } else if (fs.existsSync(path.join(req.query.path, 'folder.jpeg'))) {
+      return res.sendFile(path.join(req.query.path, 'folder.jpeg'));
+    }
+
+    return res.sendFile(path.join(req.query.path, 'folder.jpg'));
+  };
+
   const trackAlbums = (req, res) => res.status(200).send(librarian.getTrackAlbums(req.body));
   const albumTracks = (req, res) => res.status(200).send(librarian.getAlbumTracks(req.query.path));
   const deleteLibrary = (req, res) => res.status(200).send(librarian.remove(req.query));

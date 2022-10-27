@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "./node_modules/eslint/bin/eslint.js --ext js routes"
   },
@@ -11,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
+    "icy": "^2.1.0",
     "jukebox-utils": "file:../jukebox-utils"
   },
   "devDependencies": {

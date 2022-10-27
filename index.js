@@ -11,10 +11,11 @@ const settingsService = require("./routes/settings-service.js");
 const statusService = require("./routes/status-service.js");
 const styleService = require("./routes/style-service.js");
 const lightingService = require("./routes/lighting-service.js");
+const radioService = require("./routes/radio-service.js");
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
 const options = {
   dataAccessOptions: {
@@ -30,6 +31,8 @@ if (!fs.existsSync(options.dataAccessOptions.storageLocation)) {
 
 
 const librarian = new JUtils.Librarian(options);
+const lighting = new JUtils.lighting(options);
+const settings = new JUtils.settings(options);
 
 librarianSerivce(app, options);
 queueSerivce(app, options);
@@ -40,6 +43,38 @@ settingsService(app, options);
 statusService(app, options);
 styleService(app, options);
 lightingService(app, options);
+radioService(app, options);
+
+console.log('Checking libraries...');
+librarian.getAll().forEach((library) => {
+  if (!fs.existsSync(library.path)) {
+    librarian.disable(library.name);
+  } else {
+    librarian.enable(library.name);
+  }
+});
+
+console.log('Checking lighting controllers...');
+const masterSettings = settings.getSettings();
+const definedControllers = masterSettings?.controllers;
+if (definedControllers?.length > 0) {
+  definedControllers.forEach((c) => {
+    console.log(`Checking controller ${c.ip}...`);
+    lighting.getStatus(c.ip).then((status) => {
+      if (status?.state?.seg.length > 0) {
+        console.log(`Controller ${c.ip} is online.`);
+        c.online = true;
+        console.log(masterSettings);
+        settings.updateSettings(masterSettings);
+      } else {
+        console.log(`Controller ${c.ip} is offline.`);
+        c.online = false;
+        settings.updateSettings(masterSettings);
+      }
+    });
+  })
+}
+
 
 librarian.getAll().forEach((library) => {
   if (!fs.existsSync(library.path)) {
@@ -47,11 +82,11 @@ librarian.getAll().forEach((library) => {
   } else {
     librarian.enable(library.name);
   }
-})
+});
 
 app.use((err, req, res, next) => {
   if (err) {
-
+    console.log(err);
   }
   next();
 });

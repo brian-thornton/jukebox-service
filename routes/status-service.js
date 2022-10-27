@@ -12,7 +12,7 @@ const appRouter = (app, options) => {
   app.get('/status/getArtHistory', (req, res) => res.status(200).send(status.getArtHistory()));
 
   app.post('/status/updateArtHistory', (req, res) => {
-    res.status(200).send(status.updateArtHistory(req.body));
+    return res.status(200).send(status.updateArtHistory(req.body));
   });
 };
 
