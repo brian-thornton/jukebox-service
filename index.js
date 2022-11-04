@@ -29,10 +29,8 @@ if (!fs.existsSync(options.dataAccessOptions.storageLocation)) {
   fs.mkdirSync(`${options.dataAccessOptions.storageLocation}/library`);
 }
 
-
-const librarian = new JUtils.Librarian(options);
-const lighting = new JUtils.lighting(options);
-const settings = new JUtils.settings(options);
+const { lighting, librarian, log, settings } = JUtils;
+const { logError, logInfo } = log;
 
 librarianSerivce(app, options);
 queueSerivce(app, options);
@@ -45,7 +43,7 @@ styleService(app, options);
 lightingService(app, options);
 radioService(app, options);
 
-console.log('Checking libraries...');
+logInfo('Checking libraries...');
 librarian.getAll().forEach((library) => {
   if (!fs.existsSync(library.path)) {
     librarian.disable(library.name);
@@ -54,20 +52,20 @@ librarian.getAll().forEach((library) => {
   }
 });
 
-console.log('Checking lighting controllers...');
+logInfo('Checking lighting controllers...');
 const masterSettings = settings.getSettings();
 const definedControllers = masterSettings?.controllers;
 if (definedControllers?.length > 0) {
   definedControllers.forEach((c) => {
-    console.log(`Checking controller ${c.ip}...`);
+    logInfo(`Checking controller ${c.ip}...`);
     lighting.getStatus(c.ip).then((status) => {
       if (status?.state?.seg.length > 0) {
-        console.log(`Controller ${c.ip} is online.`);
+        logInfo(`Controller ${c.ip} is online.`);
         c.online = true;
-        console.log(masterSettings);
+        logInfo(masterSettings);
         settings.updateSettings(masterSettings);
       } else {
-        console.log(`Controller ${c.ip} is offline.`);
+        logInfo(`Controller ${c.ip} is offline.`);
         c.online = false;
         settings.updateSettings(masterSettings);
       }
@@ -85,8 +83,8 @@ librarian.getAll().forEach((library) => {
 });
 
 app.use((err, req, res, next) => {
-  if (err) {
-    console.log(err);
+  if (err && !err.path.includes('folder')) {
+    logError(err);
   }
   next();
 });

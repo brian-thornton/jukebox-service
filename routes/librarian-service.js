@@ -2,49 +2,60 @@ const JUtils = require('jukebox-utils');
 const path = require('path');
 const fs = require('fs');
 
-const appRouter = (app, options) => {
-  const librarian = new JUtils.Librarian(options);
+const serviceHelper = require('./service-helper');
 
-  const libraries = (req, res) => res.status(200).send(librarian.getAll());
-  const search = (req, res) => {
-    const { start, limit, search, type, startsWithFilter } = req.query;
+const appRouter = (app) => {
+  const { librarian } = JUtils;
+  const { ok } = serviceHelper;
+  const servicePath = '/librarian';
+
+  const libraries = (req, res) => ok(res, librarian.getAll());
+  const runSearch = (req, res) => {
+    const {
+      start, limit, search, type, startsWithFilter,
+    } = req.query;
 
     if (type === 'tracks') {
       const data = librarian.searchTracks(search, start, limit);
-      res.status(200).send(data);
+      ok(res, data);
     } else {
       const data = librarian.searchAlbums(search, start, limit, startsWithFilter);
-      res.status(200).send(data);
+      ok(res, data);
     }
   };
 
   const coverArt = (req, res) => {
     if (fs.existsSync(path.join(req.query.path, 'folder.jpg'))) {
       return res.sendFile(path.join(req.query.path, 'folder.jpg'));
-    } else if (fs.existsSync(path.join(req.query.path, 'folder.jpeg'))) {
+    }
+
+    if (fs.existsSync(path.join(req.query.path, 'folder.jpeg'))) {
       return res.sendFile(path.join(req.query.path, 'folder.jpeg'));
     }
 
     return res.sendFile(path.join(req.query.path, 'folder.jpg'));
   };
 
-  const trackAlbums = (req, res) => res.status(200).send(librarian.getTrackAlbums(req.body));
-  const albumTracks = (req, res) => res.status(200).send(librarian.getAlbumTracks(req.query.path));
-  const deleteLibrary = (req, res) => res.status(200).send(librarian.remove(req.query));
+  const trackAlbums = (req, res) => ok(res, librarian.getTrackAlbums(req.body));
+  const albumTracks = (req, res) => ok(res, librarian.getAlbumTracks(req.query.path));
+  const deleteLibrary = (req, res) => ok(res, librarian.remove(req.query));
   const scan = (req, res) => librarian.scan(req.body).then(res.status(200).send.bind(res));
-  const add = (req, res) => res.status(200).send(librarian.add(req.body));
-  const discover = (req, res) => res.status(200).send(librarian.discover(req.query.path));
-  const saveCoverArt = (req, res) => res.status(200).send(librarian.saveCoverArt(req.body));
-  const removeCoverArt = (req, res) => res.status(200).send(librarian.removeCoverArt(req.body));
+  const add = (req, res) => ok(res, librarian.add(req.body));
+  const discover = (req, res) => ok(res, librarian.discover(req.query.path));
+  const saveCoverArt = (req, res) => ok(res, librarian.saveCoverArt(req.body));
+  const removeCoverArt = (req, res) => ok(res, librarian.removeCoverArt(req.body));
 
   const albums = (req, res) => {
-    const { start, limit, category, filters } = req.query;
-    res.status(200).send(librarian.getAlbums(start, limit, category, filters));
+    const {
+      start, limit, category, filters,
+    } = req.query;
+
+    ok(res, librarian.getAlbums(start, limit, category, filters));
   };
 
   const tracks = (req, res) => {
     const { start, limit } = req.query;
-    res.status(200).send(librarian.getTracks(start, limit));
+    ok(res, librarian.getTracks(start, limit));
   };
 
   const downloadTrack = (req, res) => {
@@ -56,20 +67,20 @@ const appRouter = (app, options) => {
     file.pipe(res);
   };
 
-  app.get('/librarian/libraries', libraries);
-  app.get('/librarian/albums', albums);
-  app.get('/librarian/search', search);
-  app.get('/librarian/coverArt', coverArt);
-  app.get('/librarian/tracks', tracks);
-  app.get('/librarian/albumTracks', albumTracks);
-  app.get('/librarian/discover', discover);
-  app.get('/librarian/downloadTrack', downloadTrack);
-  app.post('/librarian/getTrackAlbums', trackAlbums);
-  app.post('/librarian/scan', scan);
-  app.post('/librarian/add', add);
-  app.post('/librarian/saveCoverArt', saveCoverArt);
-  app.post('/librarian/removeCoverArt', removeCoverArt);
-  app.delete('/librarian', deleteLibrary);
+  app.get(`${servicePath}/libraries`, libraries);
+  app.get(`${servicePath}/albums`, albums);
+  app.get(`${servicePath}/search`, runSearch);
+  app.get(`${servicePath}/coverArt`, coverArt);
+  app.get(`${servicePath}/tracks`, tracks);
+  app.get(`${servicePath}/albumTracks`, albumTracks);
+  app.get(`${servicePath}/discover`, discover);
+  app.get(`${servicePath}/downloadTrack`, downloadTrack);
+  app.post(`${servicePath}/getTrackAlbums`, trackAlbums);
+  app.post(`${servicePath}/scan`, scan);
+  app.post(`${servicePath}/add`, add);
+  app.post(`${servicePath}/saveCoverArt`, saveCoverArt);
+  app.post(`${servicePath}/removeCoverArt`, removeCoverArt);
+  app.delete(`${servicePath}`, deleteLibrary);
 };
 
 module.exports = appRouter;

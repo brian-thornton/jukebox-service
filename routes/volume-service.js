@@ -1,10 +1,14 @@
 const JUtils = require('jukebox-utils');
 
-const appRouter = (app, options) => {
-  const volume = new JUtils.volume(options);
+const serviceHelper = require('./service-helper');
 
-  app.get('/volume/up', (req, res) => res.status(200).send(volume.increaseVolume()));
-  app.get('/volume/down', (req, res) => res.status(200).send(volume.decreaseVolume()));
+const appRouter = (app) => {
+  const { volume } = JUtils;
+  const { ok } = serviceHelper;
+  const path = '/volume';
+
+  app.get(`${path}/up`, (req, res) => ok(res, volume.increaseVolume()));
+  app.get(`${path}/down`, (req, res) => ok(res, volume.decreaseVolume()));
 };
 
 module.exports = appRouter;

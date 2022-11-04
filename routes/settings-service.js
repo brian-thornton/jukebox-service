@@ -1,14 +1,18 @@
 const JUtils = require('jukebox-utils');
 
-const appRouter = (app, options) => {
-  const settings = new JUtils.settings(options);
+const serviceHelper = require('./service-helper');
 
-  app.get('/settings/getSettings', (req, res) => {
-    res.status(200).send(settings.getSettings());
-  });
+const appRouter = (app) => {
+  const { settings } = JUtils;
+  const { ok } = serviceHelper;
+  const path = '/settings';
 
-  app.post('/settings/updateSettings', (req, res) => {
-    res.status(200).send(settings.updateSettings(req.body));
+  app.get(`${path}/getSettings`, (req, res) => ok(res, settings.getSettings()));
+  app.post(`${path}/updateSettings`, (req, res) => ok(res, settings.updateSettings(req.body)));
+  app.get(`${path}/restrictionGroups`, (req, res) => ok(res, settings.getRestrictionGroups()));
+
+  app.post(`${path}/createRestrictionGroup`, (req, res) => {
+    ok(res, settings.createRestrictionGroup(req.body));
   });
 };
 

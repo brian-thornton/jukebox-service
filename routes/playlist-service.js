@@ -1,35 +1,34 @@
 const JUtils = require('jukebox-utils');
 
-const appRouter = (app, options) => {
-  const listKeeper = new JUtils.listKeeper(options);
+const serviceHelper = require('./service-helper');
 
-  app.get('/playlists/getAll', (req, res) => {
+const appRouter = (app) => {
+  const { listKeeper } = JUtils;
+  const { ok } = serviceHelper;
+  const path = '/playlists';
+
+  app.get(`${path}/getPlaylist`, (req, res) => ok(res, listKeeper.getPlaylist(req.query.name)));
+  app.post(`${path}/delete`, (req, res) => ok(res, listKeeper.deletePlaylist(req.body.name)));
+
+  app.get(`${path}/getAll`, (req, res) => {
     const { start, limit } = req.query;
-    res.status(200).send(listKeeper.getAllPlaylists(start, limit));
+    ok(res, listKeeper.getAllPlaylists(start, limit));
   });
 
-  app.get('/playlists/getPlaylist', (req, res) => {
-    res.status(200).send(listKeeper.getPlaylist(req.query.name));
+  app.post(`${path}/addToPlaylist`, (req, res) => {
+    ok(res, listKeeper.addToPlaylist(req.body.name, req.body.tracks));
   });
 
-  app.post('/playlists/addToPlaylist', (req, res) => {
-    res.status(200).send(listKeeper.addToPlaylist(req.body.name, req.body.tracks));
+  app.post(`${path}/removeFromPlaylist`, (req, res) => {
+    ok(res, listKeeper.removeFromPlaylist(req.body.name, req.body.tracks));
   });
 
-  app.post('/playlists/removeFromPlaylist', (req, res) => {
-    res.status(200).send(listKeeper.removeFromPlaylist(req.body.name, req.body.tracks));
+  app.post(`${path}/add`, (req, res) => {
+    ok(res, listKeeper.createPlaylist(req.body.id, req.body.name, req.body.tracks));
   });
 
-  app.post('/playlists/add', (req, res) => {
-    res.status(200).send(listKeeper.createPlaylist(req.body.id, req.body.name, req.body.tracks));
-  });
-
-  app.post('/playlists/delete', (req, res) => {
-    res.status(200).send(listKeeper.deletePlaylist(req.body.name));
-  });
-
-  app.post('/playlists/addTrackAtPosition', (req, res) => {
-    res.status(200).send(listKeeper.addTrackAtPosition(req.body.name, req.body.track, req.body.position));
+  app.post(`${path}/addTrackAtPosition`, (req, res) => {
+    ok(res, listKeeper.addTrackAtPosition(req.body.name, req.body.track, req.body.position));
   });
 };
 

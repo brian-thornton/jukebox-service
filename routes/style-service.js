@@ -1,18 +1,17 @@
 const JUtils = require('jukebox-utils');
 
-const appRouter = (app, options) => {
-  const styleManager = new JUtils.styleManager(options);
+const serviceHelper = require('./service-helper');
 
-  app.post('/styles/skins', (req, res) => {
-    res.status(200).send(styleManager.createSkin(req.body.name, req.body.skin));
-  });
+const appRouter = (app) => {
+  const { styleManager } = JUtils;
+  const { ok } = serviceHelper;
+  const path = '/styles';
 
-  app.get('/styles/skins', (req, res) => {
-    res.status(200).send(styleManager.getAll());
-  });
+  app.get(`${path}/skins`, (req, res) => ok(res, styleManager.getAll()));
+  app.post(`${path}/delete`, (req, res) => ok(res, styleManager.deleteSkin(req.body.name)));
 
-  app.post('/styles/delete', (req, res) => {
-    res.status(200).send(styleManager.deleteSkin(req.body.name));
+  app.post(`${path}/skins`, (req, res) => {
+    ok(res, styleManager.createSkin(req.body.name, req.body.skin));
   });
 };
 

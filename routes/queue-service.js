@@ -1,32 +1,35 @@
 const JUtils = require('jukebox-utils');
+const serviceHelper = require('./service-helper');
 
-const appRouter = (app, options) => {
-  const queue = new JUtils.queue(options);
+const appRouter = (app) => {
+  const { queue } = JUtils;
+  const { ok } = serviceHelper;
+  const path = '/queue';
 
-  app.get('/queue/getQueue', (req, res) => res.status(200).send(queue.getQueue(req.query.start, req.query.limit)));
-  app.get('/queue/enqueue', (req, res) => res.status(200).send(queue.enqueue(req.query.track)));
-  app.post('/queue/clearQueue', (req, res) => res.status(200).send(queue.clearQueue()));
-  app.get('/queue/play', (req, res) => res.status(200).send(queue.play()));
-  app.get('/queue/next', (req, res) => res.status(200).send(queue.next()));
+  app.get(`${path}/getQueue`, (req, res) => ok(res, queue.getQueue(req.query.start, req.query.limit)));
+  app.get(`${path}/enqueue`, (req, res) => ok(res, queue.enqueue(req.query.track)));
+  app.post(`${path}/clearQueue`, (req, res) => ok(res, queue.clearQueue()));
+  app.get(`${path}/play`, (req, res) => ok(res, queue.play()));
+  app.get(`${path}/next`, (req, res) => ok(res, queue.next()));
 
-  app.post('/queue/removeFromQueue', (req, res) => {
-    res.status(200).send(queue.removeFromQueue(req.body.tracks));
+  app.post(`${path}/removeFromQueue`, (req, res) => {
+    ok(res, queue.removeFromQueue(req.body.tracks));
   });
 
-  app.post('/queue/enqueueTracks', (req, res) => {
-    res.status(200).send(queue.enqueueTracks(req.body));
+  app.post(`${path}/enqueueTracks`, (req, res) => {
+    ok(res, queue.enqueueTracks(req.body));
   });
 
-  app.post('/queue/enqueueTracksTop', (req, res) => {
-    res.status(200).send(queue.enqueueTracksTop(req.body));
+  app.post(`${path}/enqueueTracksTop`, (req, res) => {
+    ok(res, queue.enqueueTracksTop(req.body));
   });
 
-  app.get('/queue/enqueueTop', (req, res) => {
-    res.status(200).send(queue.enqueueTop(req.query.track));
+  app.get(`${path}/enqueueTop`, (req, res) => {
+    ok(res, queue.enqueueTop(req.query.track));
   });
 
-  app.get('/queue/stop', (req, res) => {
-    res.status(200).send(queue.stop(req.query.token));
+  app.get(`${path}/stop`, (req, res) => {
+    ok(res, queue.stop(req.query.token));
   });
 };
 
