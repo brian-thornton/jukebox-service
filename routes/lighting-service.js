@@ -8,6 +8,7 @@ const appRouter = (app) => {
   const path = '/lighting';
 
   app.get(`${path}/discover`, async (req, res) => ok(res, await lighting.discover()));
+  app.get(`${path}/reset`, async (req, res) => ok(res, await lighting.reset(req.query.ip)));
   app.get(`${path}/powerOn`, async (req, res) => ok(res, await lighting.powerOn(req.query.ip)));
   app.get(`${path}/powerOff`, async (req, res) => ok(res, await lighting.powerOff(req.query.ip)));
 

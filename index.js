@@ -83,7 +83,7 @@ librarian.getAll().forEach((library) => {
 });
 
 app.use((err, req, res, next) => {
-  if (err && !err.path.includes('folder')) {
+  if (err && (!err.path || !err.path.includes('folder'))) {
     logError(err);
   }
   next();
