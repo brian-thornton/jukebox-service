@@ -32,7 +32,7 @@ const appRouter = (app) => {
 
   app.get(`${path}/demoEffect`, async (req, res) => (
     ok(res, await lighting.demoEffect(
-      req.query.ip, req.query.effect, req.query.palette, req.query.start, req.query.stop, req.query.speed,
+      req.query.ip, req.query.effect, req.query.palette, req.query.start, req.query.stop, req.query.speed, req.query.brightness,
     ))
   ));
 
