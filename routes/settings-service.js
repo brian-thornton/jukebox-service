@@ -14,6 +14,10 @@ const appRouter = (app) => {
   app.post(`${path}/createRestrictionGroup`, (req, res) => {
     ok(res, settings.createRestrictionGroup(req.body));
   });
+
+  app.post(`${path}/updateRestrictionGroup`, (req, res) => {
+    ok(res, settings.updateRestrictionGroup(req.body));
+  });
 };
 
 module.exports = appRouter;

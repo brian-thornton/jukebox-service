@@ -11,6 +11,8 @@ const appRouter = (app) => {
   app.get(`${path}/reset`, async (req, res) => ok(res, await lighting.reset(req.query.ip)));
   app.get(`${path}/powerOn`, async (req, res) => ok(res, await lighting.powerOn(req.query.ip)));
   app.get(`${path}/powerOff`, async (req, res) => ok(res, await lighting.powerOff(req.query.ip)));
+  app.get(`${path}/presets`, async (req, res) => ok(res, await lighting.getPresets(req.query.ip)));
+  app.get(`${path}/applyPreset`, async (req, res) => ok(res, await lighting.applyPreset(req.query.ip, req.query.name)));
 
   app.get(`${path}/createSegment`, async (req, res) => (
     ok(res, await lighting.createSegment(req.query.ip, req.query.start, req.query.stop))
