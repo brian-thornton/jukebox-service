@@ -13,7 +13,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "esm": "^3.2.25",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "icy": "^2.1.0",
     "jukebox-utils": "file:../jukebox-utils"
   },
