@@ -12,6 +12,8 @@ const statusService = require("./routes/status-service.js");
 const styleService = require("./routes/style-service.js");
 const lightingService = require("./routes/lighting-service.js");
 const radioService = require("./routes/radio-service.js");
+const logService = require("./routes/log-service.js");
+const metadataService = require("./routes/metadata-service.js");
 const app = express();
 
 app.use(bodyParser.json({limit: "50mb"}));
@@ -42,6 +44,8 @@ statusService(app, options);
 styleService(app, options);
 lightingService(app, options);
 radioService(app, options);
+logService(app, options);
+metadataService(app, options);
 
 logInfo('Checking libraries...');
 librarian.getAll().forEach((library) => {
@@ -62,7 +66,6 @@ if (definedControllers?.length > 0) {
       if (status?.state?.seg.length > 0) {
         logInfo(`Controller ${c.ip} is online.`);
         c.online = true;
-        logInfo(masterSettings);
         settings.updateSettings(masterSettings);
       } else {
         logInfo(`Controller ${c.ip} is offline.`);
