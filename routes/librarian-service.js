@@ -47,10 +47,10 @@ const appRouter = (app) => {
 
   const albums = (req, res) => {
     const {
-      start, limit, category, filters, restriction
+      start, limit, category, filters, restriction, genre,
     } = req.query;
 
-    ok(res, librarian.getAlbums(start, limit, category, filters, restriction));
+    ok(res, librarian.getAlbums(start, limit, category, filters, restriction, genre));
   };
 
   const tracks = (req, res) => {
