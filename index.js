@@ -8,6 +8,10 @@ const volumeService = require("./routes/volume-service.js");
 const playlistService = require("./routes/playlist-service.js");
 const spotifyService = require("./routes/spotify-service.js");
 const settingsService = require("./routes/settings-service.js");
+const settingsServiceGraphQL = require("./routes/graphql/settings-service.js");
+const librarianSerivceGraphQL = require("./routes/graphql/library-service");
+const playlistSerivceGraphQL = require("./routes/graphql/playlist-service");
+const logSerivceGraphQL = require("./routes/graphql/log-service");
 const statusService = require("./routes/status-service.js");
 const styleService = require("./routes/style-service.js");
 const lightingService = require("./routes/lighting-service.js");
@@ -16,8 +20,14 @@ const logService = require("./routes/log-service.js");
 const metadataService = require("./routes/metadata-service.js");
 const app = express();
 
-app.use(bodyParser.json({limit: "50mb"}));
-app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+var root = {};
+settingsServiceGraphQL(app, root);
+librarianSerivceGraphQL(app, root);
+logSerivceGraphQL(app, root);
+playlistSerivceGraphQL(app, root);
+
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
 const options = {
   dataAccessOptions: {

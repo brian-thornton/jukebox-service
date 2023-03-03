@@ -10,6 +10,16 @@ const appRouter = (app) => {
   const servicePath = '/librarian';
 
   const libraries = (req, res) => ok(res, librarian.getAll());
+  const getByCategory = (req, res) => ok(res, librarian.getByCategory(req.query.category))
+  const trackAlbums = (req, res) => ok(res, librarian.getTrackAlbums(req.body));
+  const albumTracks = (req, res) => ok(res, librarian.getAlbumTracks(req.query.path));
+  const deleteLibrary = (req, res) => ok(res, librarian.remove(req.query));
+  const scan = (req, res) => librarian.scan(req.body).then(res.status(200).send.bind(res));
+  const add = (req, res) => ok(res, librarian.add(req.body));
+  const discover = (req, res) => ok(res, librarian.discover(req.query.path));
+  const saveCoverArt = (req, res) => ok(res, librarian.saveCoverArt(req.body));
+  const removeCoverArt = (req, res) => ok(res, librarian.removeCoverArt(req.body));
+
   const runSearch = (req, res) => {
     const {
       start, limit, search, type, startsWithFilter,
@@ -36,15 +46,6 @@ const appRouter = (app) => {
     return res.sendFile(path.join(req.query.path, 'folder.jpg'));
   };
 
-  const trackAlbums = (req, res) => ok(res, librarian.getTrackAlbums(req.body));
-  const albumTracks = (req, res) => ok(res, librarian.getAlbumTracks(req.query.path));
-  const deleteLibrary = (req, res) => ok(res, librarian.remove(req.query));
-  const scan = (req, res) => librarian.scan(req.body).then(res.status(200).send.bind(res));
-  const add = (req, res) => ok(res, librarian.add(req.body));
-  const discover = (req, res) => ok(res, librarian.discover(req.query.path));
-  const saveCoverArt = (req, res) => ok(res, librarian.saveCoverArt(req.body));
-  const removeCoverArt = (req, res) => ok(res, librarian.removeCoverArt(req.body));
-
   const albums = (req, res) => {
     const {
       start, limit, category, filters, restriction, genre,
@@ -68,6 +69,7 @@ const appRouter = (app) => {
   };
 
   app.get(`${servicePath}/libraries`, libraries);
+  app.get(`${servicePath}/getByCategory`, getByCategory);
   app.get(`${servicePath}/albums`, albums);
   app.get(`${servicePath}/search`, runSearch);
   app.get(`${servicePath}/coverArt`, coverArt);
