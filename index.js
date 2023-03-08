@@ -2,22 +2,29 @@ const express = require("express");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const JUtils = require('jukebox-utils');
+
 const librarianSerivce = require("./routes/librarian-service.js");
 const queueSerivce = require("./routes/queue-service.js");
 const volumeService = require("./routes/volume-service.js");
 const playlistService = require("./routes/playlist-service.js");
 const spotifyService = require("./routes/spotify-service.js");
 const settingsService = require("./routes/settings-service.js");
-const settingsServiceGraphQL = require("./routes/graphql/settings-service.js");
-const librarianSerivceGraphQL = require("./routes/graphql/library-service");
-const playlistSerivceGraphQL = require("./routes/graphql/playlist-service");
-const logSerivceGraphQL = require("./routes/graphql/log-service");
 const statusService = require("./routes/status-service.js");
 const styleService = require("./routes/style-service.js");
 const lightingService = require("./routes/lighting-service.js");
 const radioService = require("./routes/radio-service.js");
 const logService = require("./routes/log-service.js");
 const metadataService = require("./routes/metadata-service.js");
+
+// GraphQL Services
+const settingsServiceGraphQL = require("./routes/graphql/settings-service.js");
+const librarianSerivceGraphQL = require("./routes/graphql/library-service");
+const playlistSerivceGraphQL = require("./routes/graphql/playlist-service");
+const logSerivceGraphQL = require("./routes/graphql/log-service");
+const queueSerivceGraphQL = require("./routes/graphql/queue-service");
+const radioSerivceGraphQL = require("./routes/graphql/radio-service");
+const styleSerivceGraphQL = require("./routes/graphql/style-service");
+
 const app = express();
 
 var root = {};
@@ -25,6 +32,9 @@ settingsServiceGraphQL(app, root);
 librarianSerivceGraphQL(app, root);
 logSerivceGraphQL(app, root);
 playlistSerivceGraphQL(app, root);
+queueSerivceGraphQL(app, root);
+radioSerivceGraphQL(app, root);
+styleSerivceGraphQL(app, root);
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
