@@ -17,24 +17,12 @@ const logService = require("./routes/log-service.js");
 const metadataService = require("./routes/metadata-service.js");
 
 // GraphQL Services
-const settingsServiceGraphQL = require("./routes/graphql/settings-service.js");
-const librarianSerivceGraphQL = require("./routes/graphql/library-service");
-const playlistSerivceGraphQL = require("./routes/graphql/playlist-service");
-const logSerivceGraphQL = require("./routes/graphql/log-service");
-const queueSerivceGraphQL = require("./routes/graphql/queue-service");
-const radioSerivceGraphQL = require("./routes/graphql/radio-service");
-const styleSerivceGraphQL = require("./routes/graphql/style-service");
+const graphqlService = require("./routes/graphql/graphql-service");
 
 const app = express();
 
 var root = {};
-settingsServiceGraphQL(app, root);
-librarianSerivceGraphQL(app, root);
-logSerivceGraphQL(app, root);
-playlistSerivceGraphQL(app, root);
-queueSerivceGraphQL(app, root);
-radioSerivceGraphQL(app, root);
-styleSerivceGraphQL(app, root);
+graphqlService(app, root);
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
