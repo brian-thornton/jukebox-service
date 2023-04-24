@@ -1,7 +1,7 @@
 {
   "name": "jukebox-service",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.2",
+  "description": "jukebox-service provides data to the [Jukebox Web Frontend](https://github.com/brian-thornton/jukebox-web)",
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
@@ -26,5 +26,13 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brian-thornton/jukebox-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/brian-thornton/jukebox-service/issues"
+  },
+  "homepage": "https://github.com/brian-thornton/jukebox-service#readme"
 }
