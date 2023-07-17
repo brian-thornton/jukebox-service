@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const serviceHelper = require('./service-helper');
+const { off } = require('process');
 
 const appRouter = (app) => {
   const { librarian } = JUtils;
@@ -48,10 +49,10 @@ const appRouter = (app) => {
 
   const albums = (req, res) => {
     const {
-      start, limit, category, filters, restriction, genre,
+      start, limit, category, filters, restriction, genre, offlineLibraries,
     } = req.query;
 
-    ok(res, librarian.getAlbums(start, limit, category, filters, restriction, genre));
+    ok(res, librarian.getAlbums(start, limit, category, filters, restriction, genre, offlineLibraries));
   };
 
   const tracks = (req, res) => {
