@@ -2,6 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const JUtils = require('jukebox-utils');
+const os = require('os');
 
 const librarianSerivce = require("./routes/librarian-service.js");
 const queueSerivce = require("./routes/queue-service.js");
@@ -15,6 +16,18 @@ const lightingService = require("./routes/lighting-service.js");
 const radioService = require("./routes/radio-service.js");
 const logService = require("./routes/log-service.js");
 const metadataService = require("./routes/metadata-service.js");
+const fileService = require("./routes/file-service.js");
+
+var interfaces = os.networkInterfaces();
+var addresses = [];
+for (var k in interfaces) {
+    for (var k2 in interfaces[k]) {
+        var address = interfaces[k][k2];
+        if (address.family === 'IPv4' && !address.internal) {
+            addresses.push(address.address);
+        }
+    }
+}
 
 // GraphQL Services
 const graphqlService = require("./routes/graphql/graphql-service");
@@ -54,6 +67,7 @@ lightingService(app, options);
 radioService(app, options);
 logService(app, options);
 metadataService(app, options);
+fileService(app, options);
 
 logInfo('Checking libraries...');
 librarian.getAll().forEach((library) => {
@@ -66,6 +80,9 @@ librarian.getAll().forEach((library) => {
 
 logInfo('Checking lighting controllers...');
 const masterSettings = settings.getSettings();
+
+masterSettings.ip = addresses[0];
+
 const definedControllers = masterSettings?.controllers;
 if (definedControllers?.length > 0) {
   definedControllers.forEach((c) => {
@@ -83,6 +100,8 @@ if (definedControllers?.length > 0) {
     });
   })
 }
+
+
 
 
 librarian.getAll().forEach((library) => {
